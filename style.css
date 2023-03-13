@@ -1,0 +1,121 @@
+:root {
+    --primary: #feb083;
+    --secondary: #faa675;
+}
+
+* {
+    font-family: "Lato", "Roboto", "Verdana", sans-serif;
+}
+
+body {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 1.2rem;
+    background-image: url("https://images.pexels.com/photos/752446/pexels-photo-752446.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+h1 {
+    text-align: center;
+}
+
+.box {
+    max-width: 600px;
+    margin: 20px 10px;
+    background: white;
+    padding: 50px 30px;
+    box-shadow: 0px 2px 7px rgb(0 0 0 / 50%);
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    line-height: 2.5em;
+    position: relative;
+    padding-left: 15px;
+}
+ li:not(:last-of-type) {
+    border-bottom: 1px solid black;
+ }
+ 
+ li.checked {
+    text-decoration: line-through;
+ }
+
+li::before {
+    display: inline-block;
+    content: "";
+    height: 2.5rem;
+    width: 10px;
+    position: absolute;
+    top: 50%;
+    left: 0px;
+    transform: translateY(-50%);
+}
+
+ li.bread::before {
+    background-color: #ffe5b7;
+ }
+
+ li.fridge::before {
+    background-color: #b7d7ff;
+ }
+
+ li.fruits::before {
+    background-color: #caedb2;
+ }
+
+ li.other::before {
+    background-color: #e9ceff;
+ }
+
+ li input {
+    margin-right: 10px;
+ }
+
+ input[type="text"], select, option {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;  
+ }
+
+ button.add {
+    background-color: var(--primary);
+    padding: 10px;
+    color: white;
+    border: none;
+    width: 100%;
+    box-shadow: 0px 2px 3px rgb(0 0 0 / 50%);
+    transition: all 0.2s;
+ }
+
+ button.add.remove-list {
+    float: right;
+    width: auto;
+ }
+
+ section h2 {
+    margin-top: 0;
+    font-size: 1.8rem;
+ }
+ .quick-add button.add {
+    width: auto;
+    margin: 0 5px 10px;
+ }
+
+ button:hover {
+    background-color: var(--secondary);
+ }
+
+ button.trash {
+    float: right;
+    background: white;
+    border: none;
+    line-height: 2.5rem;
+ }
+
+ 

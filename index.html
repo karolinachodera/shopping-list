@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style.css">
+        <meta name="description" content="Shopping List">
+        <title>Lista zakupów</title>
+    </head>
+    <body>
+        <h1>Lista zakupów</h1>
+        <!-- <ul id="shopping-list" class="box">
+
+        </ul> -->
+        <form id="adding-items" class="box">
+            <!-- <label for="add-item">Wpisz produkt</label> -->
+            <input type="text" name="add-item" placeholder="Wpisz produkt" required>
+            <!-- <label for="category">Wybierz kategorię</label> -->
+            <select name="category" id="category" required>
+                <option value="" disabled selected>Wybierz kategorię</option>
+                <option value="bread">Pieczywo</option>
+                <option value="fruits">Warzywa i owoce</option>
+                <option value="fridge">Lodówka</option>
+                <option value="other">Inne</option>
+            </select>
+            <button type="submit" name="submit" class="add">Dodaj produkt</button>
+        </form>
+        <section class="quick-add box">
+            <h2>Szybkie dodawanie</h2>
+            <button type="button" class="add" value="bread">Chleb</button>
+            <button type="button" class="add" value="bread">Bułki</button>
+            <button type="button" class="add" value="fridge">Mleko</button>
+            <button type="button" class="add" value="fridge">Jogurt</button>
+            <button type="button" class="add" value="fruits">Banany</button>
+            <button type="button" class="add" value="fruits">Jabłka</button>
+        </section>
+        <script src="script.js"></script>
+    </body>
+</html>
