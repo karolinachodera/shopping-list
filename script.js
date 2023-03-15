@@ -1,20 +1,25 @@
 const button = document.querySelector(".add");
-let list;
-let removeListButton;
+let list; // const insted of let, becouse we konw that it will be list
+console.log("list", list)
+let removeListButton; // what is it?
+console.log("removeListButton", removeListButton)
 const form = document.querySelector("#adding-items");
 const select = form.querySelector("select");
 const quickButtons = document.querySelectorAll(".quick-add button");
 let items = JSON.parse(localStorage.getItem("items")) || [];
 let index = 0; 
 
-function moveToEnd(e) {
+function moveToEnd(e) { // what does this function do?
     let index = items.findIndex(item => item.id == this.dataset.id);
+    console.log("this", this, "this.dataset.id", this.dataset.id, "index", index)
     let itemHtml = this;
-    items[index].isChecked = !items[index].isChecked;
+    console.log("itemHtml",itemHtml)
+    items[index].isChecked = !items[index].isChecked; // is this operation necessary? can we just put negation to the items?
     localStorage.setItem("items", JSON.stringify(items));
 
     if(items[index].isChecked) {
         this.classList.add("checked");
+        console.log("this.classList", this.classList)
         e.target.setAttribute("checked", true);
         removeListButton.before(itemHtml);
     } else {
@@ -65,7 +70,7 @@ function createList() {
     listHtml.setAttribute("class", "box");
     form.before(listHtml);
     list = document.querySelector("#shopping-list");
-    createRemoveButton();
+    list.append(createRemoveButton());
 }
 
 function removeList() {
@@ -77,25 +82,27 @@ function removeList() {
     removeListButton = document.createElement("button");
 }
 
+// better to return the element from this function and call list.append in the caller
 function createRemoveButton() {
     removeListButton = document.createElement("button");
     removeListButton.classList.add("remove-list");
     removeListButton.classList.add("add");
     removeListButton.textContent = "Usuń listę";
-    list.append(removeListButton);
+    list.append(removeListButton); 
     removeListButton.addEventListener("click", removeList);
     console.log(removeListButton);
 }
 
 function createListItem(item) {
     items.push(item);
-    index++;
+    index++; // What is it for
 
     if(items.length === 1 && !list) {
         createList();
     }
 
-    const html = document.createElement("li");
+    const html = document.createElement("li"); // what was the reason to call const as a "html"?
+    console.log("html", html);
     html.setAttribute("data-id", `${item.id}`);
     html.classList.add(`${item.category}`);
     html.innerHTML = `<input type="checkbox" ${item.isChecked ? "checked" : ""}>${item.name}
@@ -162,3 +169,4 @@ function startQuickItem() {
 form.addEventListener("submit", startItem);
 quickButtons.forEach(button => button.addEventListener("click", startQuickItem));
 startList(items);
+console.log("list", list)
