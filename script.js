@@ -84,7 +84,6 @@ function createRemoveButton() {
     removeListButton.textContent = "Usuń listę";
     list.append(removeListButton);
     removeListButton.addEventListener("click", removeList);
-    console.log(removeListButton);
 }
 
 function createListItem(item) {
@@ -100,7 +99,6 @@ function createListItem(item) {
     html.classList.add(`${item.category}`);
     html.innerHTML = `<input type="checkbox" ${item.isChecked ? "checked" : ""}>${item.name}
                         <button class="trash">❌</button>`;
-                        console.log(removeListButton);
 
     let checked = list.querySelector("input:checked");
 
