@@ -24,7 +24,7 @@ function ItemObject(name: string, category: string) {
 
 function moveToEnd(e: Event): void{
     let itemHtml: HTMLElement = this;
-    let index: number = items.findIndex(item => item.id === itemHtml.dataset.id);
+    let index: number = items.findIndex(item => item.id == itemHtml.dataset.id);
     items[index].isChecked = !items[index].isChecked;
     localStorage.setItem("items", JSON.stringify(items));
 
