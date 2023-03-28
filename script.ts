@@ -159,3 +159,6 @@ function startQuickItem(): void {
 form.addEventListener("submit", startItem);
 quickButtons.forEach(button => button.addEventListener("click", startQuickItem));
 startList(items);
+form.addEventListener("submit", startItem);
+quickButtons.forEach(button => button.addEventListener("click", startQuickItem));
+startList(items);
