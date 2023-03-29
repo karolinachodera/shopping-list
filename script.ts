@@ -1,12 +1,12 @@
-const button: HTMLElement = document.querySelector(".add")!;
-const form: HTMLElement = document.querySelector("#adding-items")!;
-const select: HTMLElement = form.querySelector("select")!;
-const quickButtons = document.querySelectorAll(".quick-add button");
-let localStorageItems: string = localStorage.getItem("items")!;
-let items: ItemObject[] = JSON.parse(localStorageItems) || [];
+const button: HTMLButtonElement = document.querySelector(".add")!;
+const form: HTMLFormElement = document.querySelector("#adding-items")!;
+const select: HTMLSelectElement = form.querySelector("select")!;
+const quickButtons: HTMLButtonElement[] = Array.from(document.querySelectorAll(".quick-add button"));
+let localStoredItems: string | null = localStorage.getItem("items");
+let items: ItemObject[] = localStoredItems ? JSON.parse(localStoredItems) : [];
 let index: number = 0; 
-let list: HTMLElement | null;
-let removeListButton: HTMLElement | null;
+let list: HTMLElement | null = document.querySelector("#shopping-list") || null;
+let removeListButton: HTMLButtonElement | null;
 
 interface ItemObject {
     name: string;
@@ -15,29 +15,35 @@ interface ItemObject {
     isChecked: boolean;
 }
 
-function ItemObject(this: ItemObject, name: string, category: string) {
-    this.name = name;
-    this.category = category;
-    this.id = index;
-    this.isChecked = false;
+class ItemObject {
+    constructor (name: string, category: string) {
+        this.name = name;
+        this.category = category;
+        this.id = index;
+        this.isChecked = false;
+    }
 }
 
 function moveToEnd(this: HTMLElement, e: Event): void{
-    let itemHtml: HTMLElement = this;
-    let index: number = items.findIndex(item => item.id === Number(itemHtml.dataset.id));
+    let index: number = items.findIndex(item => item.id === Number(this.dataset.id));
     items[index].isChecked = !items[index].isChecked;
     localStorage.setItem("items", JSON.stringify(items));
 
     if(items[index].isChecked) {
-        itemHtml.classList.add("checked");
+        this.classList.add("checked");
         (e.target as HTMLElement).setAttribute("checked", "true");
-        removeListButton.before(itemHtml);
+        if(removeListButton) {
+            removeListButton.before(this);
+        } else {
+            list!.append(this);
+        }
+        
     } else {
-        itemHtml.classList.remove("checked");
+        this.classList.remove("checked");
         (e.target as HTMLElement).removeAttribute("checked");
-        let checked: HTMLElement | null = list.querySelector("input:checked");
-        if(checked && checked.closest("li")) {
-            checked.closest("li").before(itemHtml);
+        let checked: HTMLElement | null = list!.querySelector("input:checked");
+        if(checked) {
+            checked.closest("li")!.before(this);
         }
     }
 }
@@ -69,17 +75,19 @@ function startList(items: ItemObject[]) {
 }
 
 function createList(): void {
-    let listHtml = document.createElement("ul");
-    listHtml.setAttribute("id", "shopping-list");
-    listHtml.setAttribute("class", "box");
-    form.before(listHtml);
-    list = document.querySelector("#shopping-list") as HTMLElement;
-    createRemoveButton();
+    if(!list) {
+        let listHtml = document.createElement("ul");
+        listHtml.setAttribute("id", "shopping-list");
+        listHtml.setAttribute("class", "box");
+        form.before(listHtml);
+        list = document.querySelector("#shopping-list") as HTMLElement;
+        createRemoveButton();
+    }
 }
 
 function removeList(): void {
     localStorage.clear();
-    list.remove();
+    list!.remove();
     items = [];
     index = 0;
     list = null;
@@ -130,7 +138,7 @@ function createListItem(item: ItemObject) {
 }
 
 function removeListItem(this: HTMLElement): void {
-    let parentItem: HTMLElement = this.parentNode;
+    let parentItem: HTMLElement = this.parentElement!;
     let index: number = items.findIndex(item => item.id === Number(parentItem.dataset.id));
     parentItem.remove();
     items.splice(index, 1);
@@ -144,14 +152,14 @@ function removeListItem(this: HTMLElement): void {
 function startItem(this: HTMLFormElement, e: Event): void {
     e.preventDefault();
     let name: string = (this.querySelector("input[type='text']") as HTMLInputElement).value;
-    let category: string = (select as HTMLSelectElement).options[(select as HTMLSelectElement).selectedIndex].value;
+    let category: string = select.options[select.selectedIndex].value;
     const item: ItemObject = new ItemObject(name, category);
     createListItem(item);
     this.reset();
 }
 
 function startQuickItem(this: HTMLButtonElement): void {
-    let name: string = this.textContent;
+    let name: string = this.textContent || "?";
     let category: string = this.value;
     const item: ItemObject = new ItemObject(name, category);
     createListItem(item);

@@ -2,34 +2,40 @@
 const button = document.querySelector(".add");
 const form = document.querySelector("#adding-items");
 const select = form.querySelector("select");
-const quickButtons = document.querySelectorAll(".quick-add button");
-let localStorageItems = localStorage.getItem("items");
-let items = JSON.parse(localStorageItems) || [];
+const quickButtons = Array.from(document.querySelectorAll(".quick-add button"));
+let localStoredItems = localStorage.getItem("items");
+let items = localStoredItems ? JSON.parse(localStoredItems) : [];
 let index = 0;
-let list;
+let list = document.querySelector("#shopping-list") || null;
 let removeListButton;
-function ItemObject(name, category) {
-    this.name = name;
-    this.category = category;
-    this.id = index;
-    this.isChecked = false;
+class ItemObject {
+    constructor(name, category) {
+        this.name = name;
+        this.category = category;
+        this.id = index;
+        this.isChecked = false;
+    }
 }
 function moveToEnd(e) {
-    let itemHtml = this;
-    let index = items.findIndex(item => item.id === Number(itemHtml.dataset.id));
+    let index = items.findIndex(item => item.id === Number(this.dataset.id));
     items[index].isChecked = !items[index].isChecked;
     localStorage.setItem("items", JSON.stringify(items));
     if (items[index].isChecked) {
-        itemHtml.classList.add("checked");
+        this.classList.add("checked");
         e.target.setAttribute("checked", "true");
-        removeListButton.before(itemHtml);
+        if (removeListButton) {
+            removeListButton.before(this);
+        }
+        else {
+            list.append(this);
+        }
     }
     else {
-        itemHtml.classList.remove("checked");
+        this.classList.remove("checked");
         e.target.removeAttribute("checked");
         let checked = list.querySelector("input:checked");
-        if (checked && checked.closest("li")) {
-            checked.closest("li").before(itemHtml);
+        if (checked) {
+            checked.closest("li").before(this);
         }
     }
 }
@@ -59,12 +65,14 @@ function startList(items) {
     }
 }
 function createList() {
-    let listHtml = document.createElement("ul");
-    listHtml.setAttribute("id", "shopping-list");
-    listHtml.setAttribute("class", "box");
-    form.before(listHtml);
-    list = document.querySelector("#shopping-list");
-    createRemoveButton();
+    if (!list) {
+        let listHtml = document.createElement("ul");
+        listHtml.setAttribute("id", "shopping-list");
+        listHtml.setAttribute("class", "box");
+        form.before(listHtml);
+        list = document.querySelector("#shopping-list");
+        createRemoveButton();
+    }
 }
 function removeList() {
     localStorage.clear();
@@ -114,7 +122,7 @@ function createListItem(item) {
     }
 }
 function removeListItem() {
-    let parentItem = this.parentNode;
+    let parentItem = this.parentElement;
     let index = items.findIndex(item => item.id === Number(parentItem.dataset.id));
     parentItem.remove();
     items.splice(index, 1);
@@ -132,7 +140,7 @@ function startItem(e) {
     this.reset();
 }
 function startQuickItem() {
-    let name = this.textContent;
+    let name = this.textContent || "?";
     let category = this.value;
     const item = new ItemObject(name, category);
     createListItem(item);
