@@ -16,7 +16,7 @@ function ItemObject(name, category) {
 }
 function moveToEnd(e) {
     let itemHtml = this;
-    let index = items.findIndex(item => item.id == itemHtml.dataset.id);
+    let index = items.findIndex(item => item.id === Number(itemHtml.dataset.id));
     items[index].isChecked = !items[index].isChecked;
     localStorage.setItem("items", JSON.stringify(items));
     if (items[index].isChecked) {
@@ -114,8 +114,9 @@ function createListItem(item) {
     }
 }
 function removeListItem() {
-    let index = items.findIndex(item => item.id == this.parentNode.dataset.id);
-    this.parentNode.remove();
+    let parentItem = this.parentNode;
+    let index = items.findIndex(item => item.id === Number(parentItem.dataset.id));
+    parentItem.remove();
     items.splice(index, 1);
     localStorage.setItem("items", JSON.stringify(items));
     if (items.length === 0 && list) {

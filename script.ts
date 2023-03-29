@@ -15,16 +15,16 @@ interface ItemObject {
     isChecked: boolean;
 }
 
-function ItemObject(name: string, category: string) {
+function ItemObject(this: ItemObject, name: string, category: string) {
     this.name = name;
     this.category = category;
     this.id = index;
     this.isChecked = false;
 }
 
-function moveToEnd(e: Event): void{
+function moveToEnd(this: HTMLElement, e: Event): void{
     let itemHtml: HTMLElement = this;
-    let index: number = items.findIndex(item => item.id == itemHtml.dataset.id);
+    let index: number = items.findIndex(item => item.id === Number(itemHtml.dataset.id));
     items[index].isChecked = !items[index].isChecked;
     localStorage.setItem("items", JSON.stringify(items));
 
@@ -129,9 +129,10 @@ function createListItem(item: ItemObject) {
     }
 }
 
-function removeListItem(): void {
-    let index: number = items.findIndex(item => item.id == this.parentNode.dataset.id);
-    this.parentNode.remove();
+function removeListItem(this: HTMLElement): void {
+    let parentItem: HTMLElement = this.parentNode;
+    let index: number = items.findIndex(item => item.id === Number(parentItem.dataset.id));
+    parentItem.remove();
     items.splice(index, 1);
     localStorage.setItem("items", JSON.stringify(items));
 
@@ -140,16 +141,16 @@ function removeListItem(): void {
     }
 }
 
-function startItem(e: Event): void {
+function startItem(this: HTMLFormElement, e: Event): void {
     e.preventDefault();
-    let name: string = this.querySelector("input[type='text']").value;
+    let name: string = (this.querySelector("input[type='text']") as HTMLInputElement).value;
     let category: string = (select as HTMLSelectElement).options[(select as HTMLSelectElement).selectedIndex].value;
     const item: ItemObject = new ItemObject(name, category);
     createListItem(item);
     this.reset();
 }
 
-function startQuickItem(): void {
+function startQuickItem(this: HTMLButtonElement): void {
     let name: string = this.textContent;
     let category: string = this.value;
     const item: ItemObject = new ItemObject(name, category);
