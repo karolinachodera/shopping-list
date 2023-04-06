@@ -8,14 +8,18 @@ let index: number = 0;
 let list: HTMLElement | null = document.querySelector("#shopping-list") || null;
 let removeListButton: HTMLButtonElement | null;
 
-interface ItemObject {
+interface ItemObjectInterface {
     name: string;
     category: string;
     id: number;
     isChecked: boolean;
 }
 
-class ItemObject {
+class ItemObject implements ItemObjectInterface {
+    name;
+    category;
+    id;
+    isChecked;
     constructor (name: string, category: string) {
         this.name = name;
         this.category = category;
